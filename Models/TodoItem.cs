@@ -1,6 +1,11 @@
-namespace dotnet.Models;
-public class TodoItem
+using System.Collections.Generic;
+
+namespace dotnet.Models
 {
-    public int Id { get; set; }
-    public required string Name {get; set;}
+
+    public class TodoItem
+    {
+        public int Id { get; set; }
+        public required string Name { get; set; }
+    }
 }
