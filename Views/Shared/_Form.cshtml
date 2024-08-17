@@ -1,10 +1,33 @@
 @model TodoItem
 
 <form asp-action="Insert" id="form-action" method="post" role="form">
-    <div asp-validation-summary="All"></div>
+    @if (ViewBag.Message != null)
+    {
+        <div asp-validation-summary="All" id="summary" class="text-center mb-2 col-6">@ViewBag.Message</div>
+    }
     <label asp-for="Name"></label>
-    <input asp-for="Id" type="hidden"></input>
-    <input asp-for="Name"></input>
+    <input asp-for="Id" type="hidden" />
+    <input asp-for="Name" />
     <span asp-validation-for="Name"></span>
     <input type="submit" value="Add Todo" id="form-button">
 </form>
+
+<script>
+    const message = '@(ViewBag.Message ?? "")';
+    
+    console.log(message, "ahsjkdhjkhad");
+
+    const summaryDiv = document.getElementById("summary");
+
+    if (message === "Todo Added Succesfully") {
+            summaryDiv.style.background = "green";
+            summaryDiv.style.color = "white"
+            console.log('if')
+            @* summaryDiv.classList.add("bg-success"); *@
+        } else {
+            console.log('else')
+            summaryDiv.style.color = "white"
+            summaryDiv.style.background = "red";
+            @* summaryDiv.classList.add("bg-danger"); *@
+        }
+</script>
