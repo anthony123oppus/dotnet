@@ -1,5 +1,6 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
+    var todosData = ViewData["todos"] as TodoViewModel;
 }
 
 <div class="text-center">
@@ -8,25 +9,33 @@
             <tr>
                 <th scope="col">Id</th>
                 <th scope="col">Name</th>
-                <th scope="col">Created_At</th>
+                <th scope="col">Action</th>
             </tr>
         </thead>
         <tbody>
-            @* @foreach (var t in Model)
+            @if (todosData != null && todosData.TodoList != null)
+            {
+                foreach (var t in todosData.TodoList)
+                {
+                    <tr>
+                        <th class="todos-column px-2" scope="row">@t.Id</th>
+                        <td class="todos-column px-2">@t.Name</td>
+                        <td class="buttons-column">
+                            <input type="submit" class="btn btn-danger" value="Delete" onClick="deleteTodo(@t.Id)" />
+                            <input type="submit" class="btn btn-primary" value="Update" onClick="populateForm(@t.Id)" />
+                        </td>
+
+                    </tr>
+                }
+            }else
             {
                 <tr>
-                    <td class="todos-column" scope="row">@t.Id</td>
-                    <td class="todos-column">@t.Name</td>
+                    <td colspan="4">No todos available</td>
                 </tr>
-            } *@
-            <tr>
-                <td>anthony</td>
-                <td>oppus</td>
-                <td>anthony</td>
-                <td>minor changes</td>
-                <td>hello world</td>
-                <td>hello anthony</td>
-            </tr>
+            }
+            @* <tr>
+            <td>@Model.Name</td>
+            </tr> *@
         </tbody>
     </table>
 </div>
