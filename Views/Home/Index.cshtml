@@ -15,19 +15,28 @@
         <tbody>
             @if (todosData != null && todosData.TodoList != null)
             {
-                foreach (var t in todosData.TodoList)
+                if (todosData.TodoList.Count > 0)
+                {
+                    foreach (var t in todosData.TodoList)
+                    {
+                        <tr>
+                            <th class="todos-column px-2" scope="row">@t.Id</th>
+                            <td class="todos-column px-2">@t.Name</td>
+                            <td class="buttons-column">
+                                <input type="submit" class="btn btn-danger" value="Delete" onClick="deleteTodo(@t.Id)" />
+                                <input type="submit" class="btn btn-primary" value="Update" onClick="populateForm(@t.Id)" />
+                            </td>
+                        </tr>
+                    }
+                }
+                else
                 {
                     <tr>
-                        <th class="todos-column px-2" scope="row">@t.Id</th>
-                        <td class="todos-column px-2">@t.Name</td>
-                        <td class="buttons-column">
-                            <input type="submit" class="btn btn-danger" value="Delete" onClick="deleteTodo(@t.Id)" />
-                            <input type="submit" class="btn btn-primary" value="Update" onClick="populateForm(@t.Id)" />
-                        </td>
-
+                        <td colspan="4">No todos available</td>
                     </tr>
                 }
-            }else
+            }
+            else
             {
                 <tr>
                     <td colspan="4">No todos available</td>

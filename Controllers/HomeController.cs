@@ -139,4 +139,87 @@ public class HomeController : Controller
     {
         return View();
     }
+
+    internal TodoItem GetById(int id)
+    {
+        TodoItem todo = new()
+        {
+            Id = id,
+            Name = string.Empty
+        };
+
+        using (MySqlConnection con = new MySqlConnection(connectionString))
+        {
+            using (var tableCmd = con.CreateCommand())
+            {
+                con.Open();
+                tableCmd.CommandText = $"SELECT * FROM todo Where Id = '{id}'";
+
+                using (var reader = tableCmd.ExecuteReader())
+                {
+                    if (reader.HasRows)
+                    {
+                        reader.Read();
+                        todo.Id = reader.GetInt32(0);
+                        todo.Name = reader.GetString(1);
+                    }
+                    else
+                    {
+                        return todo;
+                    }
+                };
+            }
+        }
+
+        return todo;
+    }
+
+    public IActionResult Update(TodoItem todo)
+    {
+        using (MySqlConnection con = new MySqlConnection(connectionString))
+        {
+            using (var tableCmd = con.CreateCommand())
+            {
+                con.Open();
+                tableCmd.CommandText = $"UPDATE todo SET name = '{todo.Name}' WHERE Id = '{todo.Id}'";
+                try
+                {
+                    tableCmd.ExecuteNonQuery();
+                    TempData["message"] = "Todo Updated Succesfully";
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    TempData["message"] = "Todo updating Failed";
+                }
+            }
+        }
+
+        ViewBag.Message = TempData["message"];
+        return RedirectToAction("Index");
+    }
+
+    [HttpGet]
+    public JsonResult PopulateForm(int id)
+    {
+        var todo = GetById(id);
+        return Json(todo);
+    }
+
+
+    [HttpPost]
+    public JsonResult Delete(int id)
+    {
+        using (MySqlConnection con = new MySqlConnection(connectionString))
+        {
+            using (var tableCmd = con.CreateCommand())
+            {
+                con.Open();
+                tableCmd.CommandText = $"DELETE from todo WHERE Id = '{id}'";
+                tableCmd.ExecuteNonQuery();
+            }
+        }
+
+        return Json(new { });
+    }
 }

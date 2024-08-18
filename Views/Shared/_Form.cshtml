@@ -1,33 +1,45 @@
-@model TodoItem
+@model TodoViewModel
 
 <form asp-action="Insert" id="form-action" method="post" role="form">
     @if (ViewBag.Message != null)
     {
-        <div asp-validation-summary="All" id="summary" class="text-center mb-2 col-6">@ViewBag.Message</div>
+        <div asp-validation-summary="All" id="summary" class="text-center mb-2 col-6"></div>
     }
-    <label asp-for="Name"></label>
-    <input asp-for="Id" type="hidden" />
-    <input asp-for="Name" />
-    <span asp-validation-for="Name"></span>
-    <input type="submit" value="Add Todo" id="form-button">
+    <label asp-for="Todo.Name"></label>
+    <input asp-for="Todo.Id" type="hidden" />
+    <input asp-for="Todo.Name" />
+    <span asp-validation-for="Todo.Name"></span>
+    <input type="submit" id="form-button" class="btn btn-success" value="Add Todo" />
 </form>
 
 <script>
     const message = '@(ViewBag.Message ?? "")';
-    
+
     console.log(message, "ahsjkdhjkhad");
 
     const summaryDiv = document.getElementById("summary");
+    let timeDisplay = true
 
-    if (message === "Todo Added Succesfully") {
-            summaryDiv.style.background = "green";
-            summaryDiv.style.color = "white"
-            console.log('if')
-            @* summaryDiv.classList.add("bg-success"); *@
+    const displayFunction = () => {
+        if (timeDisplay) {
+            summaryDiv.style.display = "block"
+            if (message === "Todo Added Succesfully" || message === "Todo Updated Succesfully") {
+                summaryDiv.innerText = message
+                summaryDiv.style.background = "green";
+                summaryDiv.style.color = "white"
+            } else {
+                summaryDiv.innerText = message
+                summaryDiv.style.color = "white"
+                summaryDiv.style.background = "red";
+            }
         } else {
-            console.log('else')
-            summaryDiv.style.color = "white"
-            summaryDiv.style.background = "red";
-            @* summaryDiv.classList.add("bg-danger"); *@
+            summaryDiv.style.display = "none"
         }
+    }
+    displayFunction()
+
+    setTimeout(() => {
+        timeDisplay = false
+        displayFunction()
+    }, 2000)
 </script>
